@@ -19,5 +19,5 @@ var getAll = () => {
 
 module.exports = {
   addNote;
-
+  getAll;
 };
