@@ -2,22 +2,56 @@ console.log('Starting notes.js');
 
 const fs = require('fs');
 
-
-// addNote method creates a txt file, and appends the yargs title and body to
-// the document.
-var addNote = (title, body) => {
-  console.log('Adding note', title, body);
-  fs.writeFile(`${title}.txt`, body, (err) => {
-    if (err) throw err;
-  console.log('Note added');
-});
+var fetchNotes = () => {
+  try {
+    var notesString = fs.readFileSync('notes-data.json');
+    return JSON.parse(notesString);
+  } catch (e) {
+    return [];
+  };
 };
 
+var saveNotes = (notes) => {
+  fs.writeFileSync('notes-data.json', JSON.stringify(notes));
+};
+
+// addNote method creates a txt file, and appends the yargs title and body to
+// the document. It also updates notes-data.json with the data for the new note.
+var addNote = (title, body) => {
+  var notes = fetchNotes();
+  var note = {
+    title,
+    body
+  };
+
+  var duplicateNotes = notes.filter((note) => note.title === title);
+
+  if (duplicateNotes.length === 0) {
+  notes.push(note);
+  saveNotes(notes);
+  return note;
+  }
+};
+
+
 var getAll = () => {
-  fs.
+  console.log(fs.readdir('./'));
+};
+
+var getNote = (title) => {
+  console.log('Getting note:', title);
+  fs.open(`./${title}`, 'r', (err, fd) => {
+
+  });
+}
+
+var delNote = (title) => {
+  console.log('Deleteing note:', title);
 }
 
 module.exports = {
-  addNote;
-  getAll;
+  addNote,
+  getAll,
+  getNote,
+  delNote,
 };
