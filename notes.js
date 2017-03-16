@@ -24,33 +24,40 @@ var addNote = (title, body) => {
     body
   };
 
-  var duplicateNotes = notes.filter((note) => note.title === title);
+   var duplicateNotes = notes.filter((note) => note.title === title);
 
   if (duplicateNotes.length === 0) {
   notes.push(note);
   saveNotes(notes);
-  return note;
+  return note
   }
 };
 
-
-var getAll = () => {
-  console.log(fs.readdir('./'));
+var getAll = (cb) => {
+  var notes = fetchNotes();
+  return cb(notes)
 };
 
 var getNote = (title) => {
-  console.log('Getting note:', title);
-  fs.open(`./${title}`, 'r', (err, fd) => {
+  var notes = fetchNotes();
+  var note = notes.filter((a) => a.title === title);
 
-  });
-}
+  return note[0];
+
+};
 
 var delNote = (title) => {
 var notes = fetchNotes();
 filteredNotes = notes.filter((note) => note.title !== title);
 saveNotes(filteredNotes);
 
-return notes.length > filteredNotes.length
+return notes.length > filteredNotes.length;
+}
+
+var logNote = (note) => {
+  console.log('---')
+  console.log('Title: '+note.title);
+  console.log('Title: '+note.body);
 }
 
 module.exports = {
@@ -58,4 +65,5 @@ module.exports = {
   getAll,
   getNote,
   delNote,
+  logNote
 };
